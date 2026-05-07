@@ -4,8 +4,8 @@
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Checks if highlighted text is factually correct.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"author": "Ruei Kuan Wei",
+	"authorUrl": "",
+	"fundingUrl": "Buy me a coffee: https://www.buymeacoffee.com/rueik",
 	"isDesktopOnly": true
 }
