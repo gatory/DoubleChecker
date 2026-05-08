@@ -1,27 +1,25 @@
 import { Plugin, MarkdownView } from 'obsidian';
+import { DoubleCheckerView, VIEW_TYPE_DOUBLE_CHECKER } from 'views/DoubleCheckerView';
 
 export default class DoubleChecker extends Plugin {
     async onload() {
-        const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
-        if (activeView) {
-            const editor = activeView.editor;
+        console.log('Loading Double Checker plugin');
 
-            const selectedText = editor.getSelection();
-            if (selectedText) {
-                console.log('Selected text:', selectedText);
-            } else {
-                console.log('No text selected.');
-            }
-        }
+        this.registerView(VIEW_TYPE_DOUBLE_CHECKER, (leaf) => new DoubleCheckerView(leaf));
+
+        this.addRibbonIcon('check-check', 'Double Check', () => {
+            this.activateView();
+        });
+
 
         this.addCommand({
-            id: 'check-double',
-            name: 'Check Double',
+            id: 'double-check',
+            name: 'Double Check Selected Text',
             callback: () => {
                 const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
                 if (activeView) {
                     const editor = activeView.editor;
-                    const selectedText = editor.getSelection();
+                    const selectedText = editor.getSelection().replace(/\s+/g, ' ').trim();
                     if (selectedText) {
                         console.log('Selected text:', selectedText);
                     } else {
@@ -30,8 +28,27 @@ export default class DoubleChecker extends Plugin {
                 }
             }
         });
+
+        
+    }
+
+    async activateView() {
+        const { workspace } = this.app;
+
+        let leaf = workspace.getLeavesOfType(VIEW_TYPE_DOUBLE_CHECKER)[0];
+
+        if (!leaf) {
+            leaf = workspace.getRightLeaf(false);
+            await leaf.setViewState({
+                type: VIEW_TYPE_DOUBLE_CHECKER,
+                active: true,
+            });
+        }
+
+        workspace.revealLeaf(leaf);
     }
 
     onunload() {
+        console.log('Unloading Double Checker plugin');
     }
 }
